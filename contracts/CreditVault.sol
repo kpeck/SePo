@@ -199,6 +199,9 @@ contract CreditVault is Ownable, DateTime{
 
         //close the position
         positions[_counter].closed=true;
+        positions[_counter].closed=false;
+        positions[_counter].closed=true;
+
     }
 
 
