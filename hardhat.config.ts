@@ -8,6 +8,7 @@ import "hardhat-spdx-license-identifier";
 import "solidity-coverage";
 
 import "./tasks/accounts";
+
 import "./tasks/deploy";
 
 import { chainIds } from "./constants";
@@ -63,8 +64,9 @@ const config: HardhatUserConfig = {
       chainId: chainIds.hardhat,
       forking: {
         enabled: process.env.FORKING ? true : false,
-        url: "https://eth-mainnet.alchemyapi.io/v2/" + process.env.ALCHEMY_API_KEY,
-        blockNumber: 14768290,
+        url : "https://eth-rinkeby.alchemyapi.io/v2/62b758YuiU9wnlYg7ialxWSeYKXfR0RY",
+        //url: "https://eth-mainnet.alchemyapi.io/v2/" + process.env.ALCHEMY_API_KEY,
+        blockNumber: 10714800, //14768290,
       },
     },
     goerli: getChainConfig("goerli"),
@@ -79,7 +81,7 @@ const config: HardhatUserConfig = {
     tests: "./test",
   },
   solidity: {
-    version: "0.8.10",
+    version: "0.7.6",
     settings: {
       metadata: {
         // Not including the metadata hash

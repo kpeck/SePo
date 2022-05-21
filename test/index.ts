@@ -1,11 +1,11 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
-import { AAVElendingpool, CHAINLINKfeedregistry, WBTCcontract, WBTCwhale, DAIcontract, DAIwhale, AAVEabi, AAVEbtcabi, AAVEbtcstabledebt, WETHcontract, WETHwhale, ETHOSerc721deckwrapper } from "./common"; 
+import { AAVElendingpool, WBTCcontract, WBTCwhale, DAIcontract, DAIwhale, AAVEbtcstabledebt, WETHcontract, WETHwhale, ETHOSerc721deckwrapper } from "./commonRinkeby"; 
 import { getTokens } from "./types";
 import ERC20 from "@openzeppelin/contracts/build/contracts/ERC20.json";
 import { Console } from "console";
-import { utils } from "ethers";
+import { Signer, utils } from "ethers";
 
 describe("Credit delegation", function () {
   let account= {} as SignerWithAddress;
@@ -29,11 +29,10 @@ describe("Credit delegation", function () {
     await getTokens(account.address, DAIcontract ,DAIwhale, ethers.utils.parseUnits("50000.0",18));
     //show USDC balance
     balance = await DAI.balanceOf(account.address); // Balance of USDC
-    //console.log("USDC BALANCE BEFORE DEPOSIT: " + balance.toString());
 
     //deploy contract
     const CreditVault = await ethers.getContractFactory("CreditVault");
-    const creditVault = await CreditVault.connect(account).deploy(AAVElendingpool,CHAINLINKfeedregistry,AAVEbtcstabledebt);
+    const creditVault = await CreditVault.connect(account).deploy(AAVElendingpool,AAVEbtcstabledebt);
     await creditVault.deployed();
 
     //approve funds on contract 
@@ -43,9 +42,10 @@ describe("Credit delegation", function () {
     await creditVault.connect(account).deposit(DAIcontract,ethers.utils.parseUnits("50000.0",18));
 
     //show USDC balance
-    balance = await DAI.balanceOf(account.address); // Balance of USDC
+    //balance = await DAI.balanceOf(account.address); // Balance of USDC
     //console.log("USDC BALANCE AFTER DEPOSIT: " + balance.toString());
   
+   
 
   });
 
@@ -55,12 +55,12 @@ describe("Credit delegation", function () {
     
     //deploy contract creditVault
     const CreditVault = await ethers.getContractFactory("CreditVault");
-    const creditVault = await CreditVault.connect(account).deploy(AAVElendingpool,CHAINLINKfeedregistry,AAVEbtcstabledebt);
+    const creditVault = await CreditVault.connect(account).deploy(AAVElendingpool,AAVEbtcstabledebt);
     await creditVault.deployed();
 
     //deploy contract debitVault
     const DebitVault = await ethers.getContractFactory("DebitVault");
-    const debitVault = await DebitVault.connect(account).deploy(AAVElendingpool, creditVault.address ,CHAINLINKfeedregistry);
+    const debitVault = await DebitVault.connect(account).deploy(AAVElendingpool, creditVault.address);
     await debitVault.deployed();
 
     //set debitVault on creditVault
@@ -78,12 +78,12 @@ describe("Credit delegation", function () {
 
     //deploy contract creditVault
     const CreditVault = await ethers.getContractFactory("CreditVault");
-    const creditVault = await CreditVault.connect(account).deploy(AAVElendingpool,CHAINLINKfeedregistry,AAVEbtcstabledebt);
+    const creditVault = await CreditVault.connect(account).deploy(AAVElendingpool,AAVEbtcstabledebt);
     await creditVault.deployed();
 
     //deploy contract debitVault
     const DebitVault = await ethers.getContractFactory("DebitVault");
-    const debitVault = await DebitVault.connect(account).deploy(AAVElendingpool, creditVault.address ,CHAINLINKfeedregistry);
+    const debitVault = await DebitVault.connect(account).deploy(AAVElendingpool, creditVault.address );
     await debitVault.deployed();
 
     //set debitVault on creditVault
@@ -125,7 +125,7 @@ describe("Credit delegation", function () {
 
     //deploy contract
     const CreditVault = await ethers.getContractFactory("CreditVault");
-    const creditVault = await CreditVault.connect(account).deploy(AAVElendingpool,CHAINLINKfeedregistry,AAVEbtcstabledebt);
+    const creditVault = await CreditVault.connect(account).deploy(AAVElendingpool,AAVEbtcstabledebt);
     await creditVault.deployed();
 
     //approve funds on contract 
@@ -152,12 +152,12 @@ describe("Credit delegation", function () {
 
     //deploy contract creditVault
     const CreditVault = await ethers.getContractFactory("CreditVault");
-    const creditVault = await CreditVault.connect(account).deploy(AAVElendingpool,CHAINLINKfeedregistry,AAVEbtcstabledebt);
+    const creditVault = await CreditVault.connect(account).deploy(AAVElendingpool,AAVEbtcstabledebt);
     await creditVault.deployed();
 
     //deploy contract debitVault
     const DebitVault = await ethers.getContractFactory("DebitVault");
-    const debitVault = await DebitVault.connect(account).deploy(AAVElendingpool, creditVault.address ,CHAINLINKfeedregistry);
+    const debitVault = await DebitVault.connect(account).deploy(AAVElendingpool, creditVault.address );
     await debitVault.deployed();
 
     //set debitVault on creditVault
@@ -192,12 +192,12 @@ describe("Credit delegation", function () {
 
     //deploy contract creditVault
     const CreditVault = await ethers.getContractFactory("CreditVault");
-    const creditVault = await CreditVault.connect(account).deploy(AAVElendingpool,CHAINLINKfeedregistry,AAVEbtcstabledebt);
+    const creditVault = await CreditVault.connect(account).deploy(AAVElendingpool,AAVEbtcstabledebt);
     await creditVault.deployed();
 
     //deploy contract debitVault
     const DebitVault = await ethers.getContractFactory("DebitVault");
-    const debitVault = await DebitVault.connect(account).deploy(AAVElendingpool, creditVault.address ,CHAINLINKfeedregistry);
+    const debitVault = await DebitVault.connect(account).deploy(AAVElendingpool, creditVault.address );
     await debitVault.deployed();
 
     //set debitVault on creditVault
@@ -244,12 +244,12 @@ describe("Securitization", function () {
 
     //deploy contract creditVault
     const CreditVault = await ethers.getContractFactory("CreditVault");
-    const creditVault = await CreditVault.connect(account).deploy(AAVElendingpool,CHAINLINKfeedregistry,AAVEbtcstabledebt);
+    const creditVault = await CreditVault.connect(account).deploy(AAVElendingpool,AAVEbtcstabledebt);
     await creditVault.deployed();
 
     //deploy contract debitVault
     const DebitVault = await ethers.getContractFactory("DebitVault");
-    const debitVault = await DebitVault.connect(account).deploy(AAVElendingpool, creditVault.address ,CHAINLINKfeedregistry);
+    const debitVault = await DebitVault.connect(account).deploy(AAVElendingpool, creditVault.address );
     await debitVault.deployed();
 
     //deploy contract securitization
@@ -296,12 +296,12 @@ describe("Securitization", function () {
 
     //deploy contract creditVault
     const CreditVault = await ethers.getContractFactory("CreditVault");
-    const creditVault = await CreditVault.connect(account).deploy(AAVElendingpool,CHAINLINKfeedregistry,AAVEbtcstabledebt);
+    const creditVault = await CreditVault.connect(account).deploy(AAVElendingpool,AAVEbtcstabledebt);
     await creditVault.deployed();
 
     //deploy contract debitVault
     const DebitVault = await ethers.getContractFactory("DebitVault");
-    const debitVault = await DebitVault.connect(account).deploy(AAVElendingpool, creditVault.address ,CHAINLINKfeedregistry);
+    const debitVault = await DebitVault.connect(account).deploy(AAVElendingpool, creditVault.address );
     await debitVault.deployed();
 
     //deploy contract securitization
@@ -328,7 +328,7 @@ describe("Securitization", function () {
 
     //create the contract for the nfts
     await securitization.connect(account).createContract(0);    
-
+    console.log("Securitization in 4 new assets");
     //mint 4 erc721. Divide the position into 4 nft and convert them into items on ethos
     let itemId;
     for(let i =0;i<4;i++){

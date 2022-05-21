@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity =0.8.10;
+pragma solidity <=0.8.10;
 
 interface IAaveDebtToken {
     function approveDelegation(address delegatee, uint256 amount) external;

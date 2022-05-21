@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity =0.8.10;
+pragma solidity <=0.8.10;
 
-import { IERC20, SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import { IERC20, SafeERC20 } from "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 import { ERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import {ERC721URIStorage } from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 import { ICreditVault } from "./interfaces/ICreditVault.sol";
 import { IERC721securitization } from "./interfaces/IERC721securitization.sol";
@@ -15,7 +14,7 @@ import { IEthosERC721DeckWrapper } from "./interfaces/IEthosERC721DeckWrapper.so
 import "hardhat/console.sol";
 
 
-contract Securitization is ERC721URIStorage, Ownable{
+contract Securitization is ERC721, Ownable{
 
     ICreditVault private creditVault;
     IEthosERC721DeckWrapper private ethosDeck;
@@ -62,11 +61,15 @@ contract Securitization is ERC721URIStorage, Ownable{
         bool reserve = false;
         bytes memory data = abi.encode(values,receivers,reserve);
         ERC721(counterContract[_counter]).safeTransferFrom(address(this),address(ethosDeck),itemId,data);
-        //uint256 id = ethosDeck.itemIdOf(counterContract[_counter]);
+        uint256 id = ethosDeck.itemIdOf(counterContract[_counter]);
+        console.log("Minting new ERC20: ");
+        console.log("%s", IERC20(address(uint160(id))).balanceOf(_creditor));
+
     }
 
 
     function createContract(uint256 _counter) public{
+        console.log("Amount of ALICE's credit to securitize: %s", creditVault.getPositionAmount(_counter));
         contractNft = new ERC721securitization();
         counterContract[_counter]=address(contractNft);
     }

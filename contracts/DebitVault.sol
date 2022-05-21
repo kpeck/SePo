@@ -1,11 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity =0.8.10;
+pragma solidity <=0.8.10;
 
 //openzeppelin-chainlink
-import { IERC20, SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import { IERC20, SafeERC20 } from "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
-import "@chainlink/contracts/src/v0.8/interfaces/FeedRegistryInterface.sol";
-import "@chainlink/contracts/src/v0.8/Denominations.sol";
 
 
 //interfaces
@@ -30,7 +28,6 @@ contract DebitVault is Ownable {
     //internal constants
     IAaveLendingPool private aaveLendingPool;
     ICreditVault private creditVault;
-    FeedRegistryInterface private registry;
 
     //example for this POC
     struct tokenData {
@@ -41,11 +38,10 @@ contract DebitVault is Ownable {
     tokenData private wethData;
 
     
-    constructor(address _aaveLendingPool, address _creditVault, address _registry){
+    constructor(address _aaveLendingPool, address _creditVault){
         //init vars
         aaveLendingPool = IAaveLendingPool(_aaveLendingPool);
         creditVault = ICreditVault(_creditVault);
-        registry = FeedRegistryInterface(_registry);
 
         //example for this POC
         wethData.token=0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2; //ethereum loan to value 80%

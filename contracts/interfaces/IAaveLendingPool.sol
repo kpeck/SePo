@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity =0.8.10;
+pragma solidity <=0.8.10;
 
 interface IAaveLendingPool {
     
-    function deposit(
+    function supply(
         address asset,
         uint256 amount,
         address onBehalfOf,

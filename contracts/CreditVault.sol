@@ -1,11 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity =0.8.10;
+pragma solidity <= 0.8.10;
 
 //openzeppelin-chainlink-datetime
-import { IERC20, SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import { IERC20, SafeERC20 } from "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
-import "@chainlink/contracts/src/v0.8/interfaces/FeedRegistryInterface.sol";
-import "@chainlink/contracts/src/v0.8/Denominations.sol";
 import { Counters } from "@openzeppelin/contracts/utils/Counters.sol";
 import { DateTime } from "./libraries/DateTime.sol";
 
@@ -15,6 +13,7 @@ import { DateTime } from "./libraries/DateTime.sol";
 import { IAaveLendingPool } from "./interfaces/IAaveLendingPool.sol";
 import { IAaveProtocolDataProvider } from "./interfaces/IAaveProtocolDataProvider.sol";
 import { IAaveDebtToken } from "./interfaces/IAaveDebtToken.sol";
+
 
 
 import "hardhat/console.sol";
@@ -33,7 +32,6 @@ contract CreditVault is Ownable, DateTime{
     //internal constants 
     IAaveLendingPool public aaveLendingPool;
     IAaveDebtToken private aaveDebtTokenBtc;
-    FeedRegistryInterface private registry;
     using Counters for Counters.Counter;
     Counters.Counter private counter;    
     address private debitVault;
@@ -60,12 +58,10 @@ contract CreditVault is Ownable, DateTime{
     }
     mapping (uint256 => positionOpened) private positions; //counter - structPosition
           
-    constructor(address _aaveLendingPool, address _registry, address _aaveBtcStable) {
+    constructor(address _aaveLendingPool, address _aaveBtcStable) {
         //init vars
         aaveLendingPool = IAaveLendingPool(_aaveLendingPool);
         aaveDebtTokenBtc = IAaveDebtToken(_aaveBtcStable);
-        registry = FeedRegistryInterface(_registry);
-        counter.reset();
     }
 
     function setDebitVault(address _debitVault) public onlyOwner {
@@ -80,7 +76,6 @@ contract CreditVault is Ownable, DateTime{
         return positions[_counter].amount;
     }
 
-
     /**
      * @dev Deposit an amount of token on aave. Creditor Function.
      * @param _token The address of the underlying asset to deposit
@@ -89,12 +84,12 @@ contract CreditVault is Ownable, DateTime{
     function deposit(address _token, uint256 _amount) public {
         IERC20(_token).safeTransferFrom(msg.sender, address(this), _amount);
         IERC20(_token).safeApprove(address(aaveLendingPool),_amount);
-        aaveLendingPool.deposit(address(IERC20(_token)), _amount, address(this), 0);
+        aaveLendingPool.supply(address(IERC20(_token)), _amount, address(this), 0);
 
         if(creditLine[msg.sender][_token].deposited==0){
             creditLine[msg.sender][_token].lended = false;
         }     
-        creditLine[msg.sender][_token].deposited += _amount;        
+        creditLine[msg.sender][_token].deposited += _amount;     
     }
 
     /**
@@ -199,9 +194,7 @@ contract CreditVault is Ownable, DateTime{
 
         //close the position
         positions[_counter].closed=true;
-        positions[_counter].closed=false;
-        positions[_counter].closed=true;
-
+        
     }
 
 

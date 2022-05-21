@@ -22,8 +22,8 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 interface IAaveLendingPoolInterface extends ethers.utils.Interface {
   functions: {
     "borrow(address,uint256,uint256,uint16,address)": FunctionFragment;
-    "deposit(address,uint256,address,uint16)": FunctionFragment;
     "repay(address,uint256,uint256,address)": FunctionFragment;
+    "supply(address,uint256,address,uint16)": FunctionFragment;
     "withdraw(address,uint256,address)": FunctionFragment;
   };
 
@@ -32,12 +32,12 @@ interface IAaveLendingPoolInterface extends ethers.utils.Interface {
     values: [string, BigNumberish, BigNumberish, BigNumberish, string]
   ): string;
   encodeFunctionData(
-    functionFragment: "deposit",
-    values: [string, BigNumberish, string, BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "repay",
     values: [string, BigNumberish, BigNumberish, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "supply",
+    values: [string, BigNumberish, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "withdraw",
@@ -45,8 +45,8 @@ interface IAaveLendingPoolInterface extends ethers.utils.Interface {
   ): string;
 
   decodeFunctionResult(functionFragment: "borrow", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "repay", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "supply", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
   events: {};
@@ -105,19 +105,19 @@ export class IAaveLendingPool extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    deposit(
-      asset: string,
-      amount: BigNumberish,
-      onBehalfOf: string,
-      referralCode: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     repay(
       asset: string,
       amount: BigNumberish,
       rateMode: BigNumberish,
       onBehalfOf: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    supply(
+      asset: string,
+      amount: BigNumberish,
+      onBehalfOf: string,
+      referralCode: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -138,19 +138,19 @@ export class IAaveLendingPool extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  deposit(
-    asset: string,
-    amount: BigNumberish,
-    onBehalfOf: string,
-    referralCode: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   repay(
     asset: string,
     amount: BigNumberish,
     rateMode: BigNumberish,
     onBehalfOf: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  supply(
+    asset: string,
+    amount: BigNumberish,
+    onBehalfOf: string,
+    referralCode: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -171,14 +171,6 @@ export class IAaveLendingPool extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    deposit(
-      asset: string,
-      amount: BigNumberish,
-      onBehalfOf: string,
-      referralCode: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     repay(
       asset: string,
       amount: BigNumberish,
@@ -186,6 +178,14 @@ export class IAaveLendingPool extends BaseContract {
       onBehalfOf: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    supply(
+      asset: string,
+      amount: BigNumberish,
+      onBehalfOf: string,
+      referralCode: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     withdraw(
       asset: string,
@@ -207,19 +207,19 @@ export class IAaveLendingPool extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    deposit(
-      asset: string,
-      amount: BigNumberish,
-      onBehalfOf: string,
-      referralCode: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     repay(
       asset: string,
       amount: BigNumberish,
       rateMode: BigNumberish,
       onBehalfOf: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    supply(
+      asset: string,
+      amount: BigNumberish,
+      onBehalfOf: string,
+      referralCode: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -241,19 +241,19 @@ export class IAaveLendingPool extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    deposit(
-      asset: string,
-      amount: BigNumberish,
-      onBehalfOf: string,
-      referralCode: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     repay(
       asset: string,
       amount: BigNumberish,
       rateMode: BigNumberish,
       onBehalfOf: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    supply(
+      asset: string,
+      amount: BigNumberish,
+      onBehalfOf: string,
+      referralCode: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
