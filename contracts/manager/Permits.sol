@@ -10,10 +10,6 @@ contract Permits is Ownable {
     
     mapping (address => mapping (address => bool) procurators;
 
-    constructor () {
-        //empty
-    }
-
     function setPermit (address _onBehalfOf, address _procurator) public {
         require (
             msg.sender == _onBehalfOf || msg.sender == owner(),
@@ -30,8 +26,11 @@ contract Permits is Ownable {
         procurators[_onBehalfOf][_procurator] = false;
     }
 
-    modifier permitted(address _onBehalfOf, address _procurator) {
-        require(procurators[_onBehalfOf][_procurator]== true, Errors.CALLER_WITH_NO_REQUIREMENTS);
+    modifier hasPermits(address _onBehalfOf, address _procurator) {
+        require(
+            msg.sender == _onBehalfOf || procurators[_onBehalfOf][_procurator]== true, 
+            Errors.CALLER_WITH_NO_REQUIREMENTS
+        );
         _;
     }
 }

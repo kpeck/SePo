@@ -28,7 +28,7 @@ contract TOKENManager is Ownable{
         token = _token;
     }
 
-    modifier callerCreditVault() {
+    modifier callerCreditorsVault() {
         require(
             contractsProvider.getAddress(1)== msg.sender,
              Errors.CALLER_WITH_NO_REQUIREMENTS
@@ -48,16 +48,16 @@ contract TOKENManager is Ownable{
         contractsProvider = IContractsProvider(_contractsProvider);
     }
 
-    function setDAIaddress(address _DAItoken) public onlyOwner {
-        token = _DAItoken;
+    function setAddress(address _token) public onlyOwner {
+        token = _token;
     }
 
-    function deposit(address _depositor, uint256 _amount) public callerCreditVault {
+    function deposit(address _depositor, uint256 _amount) public callerCreditorsVault {
         IERC20(token).safeTransferFrom(_depositor, address(this), _amount);
         creditLines[_depositor].aavedeposited+=_amount;
     }
 
-    function withdraw(address _depositor, uint256 _amount) public callerCreditVault {
+    function withdraw(address _depositor, uint256 _amount) public callerCreditorsVault {
         require(
             (creditLines[_depositor].stddeposited - creditLines[_depositor].stdlended) >= _amount,
             Errors.NOT_ENOUGH_AMOUNT_DEPOSITED_FREE_FOR_WITHDRAW
@@ -73,10 +73,5 @@ contract TOKENManager is Ownable{
         );
         IERC20(token).safeTransfer(msg.sender, _amount);
         creditLines[_depositor].stdlended+=_amount;
-    }
-
-
-    
-
-   
+    }   
 }
