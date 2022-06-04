@@ -35,7 +35,7 @@ contract Positions is Ownable{
     }
     mapping (bytes32 => contractsDataGeneric) contractsGeneric;
     
-    constructor () {
+    constructor (address _contractsProvider) {
         contractsProvider = IContractsProvider(_contractsProvider);
     }
 

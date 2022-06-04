@@ -42,12 +42,17 @@ contract CreditorsVault is Ownable, Permits{
     }
 
     function approveLoanP2P (address _creditor, address _debitor, uint256 _amount, bytes32 encodedContract) public hasPermits (_creditor, msg.sender) {
+        
         //send this approve to positions
         //approve by the creditor off chain
     }
 
     function approveLoanGeneric () public hasPermits (){
 
+    }
+
+    function replicateLoan () public hasPermits () {
+        
     }
 
     function startLoanP2P () public hasPermits() {
